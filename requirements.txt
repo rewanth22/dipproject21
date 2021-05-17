@@ -3,4 +3,3 @@ numpy
 Pillow==2.3.0
 opencv-python-headless
 mtcnn
-iwatermark==0.0.2
