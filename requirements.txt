@@ -3,4 +3,4 @@ numpy
 Pillow==2.3.0
 opencv-python-headless
 mtcnn
-tensorflow==2.2.0
+tensorflow==2.5.0
