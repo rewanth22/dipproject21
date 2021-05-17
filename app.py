@@ -6,16 +6,13 @@ from PIL import Image, ImageEnhance
 import cv2 
 import os
 import numpy as np
-from mtcnn import MTCNN
-from imwatermark import WatermarkEncoder
-from imwatermark import WatermarkDecoder
 
 
 def main():
 
     selected_box = st.sidebar.selectbox(
     'Choose one of the following',
-    ('Welcome','Thresholding','Contrast','Edge Detection', 'Watermark','Invisible Watermark','Face Detection')
+    ('Welcome','Thresholding','Contrast','Edge Detection', 'Watermark')
     )
     
     if selected_box == 'Welcome':
@@ -26,12 +23,8 @@ def main():
         edge_detection()
     if selected_box == 'Watermark':
         watermark()
-    if selected_box == 'Face Detection':
-        face_detection()
     if selected_box == 'Contrast':
         contrast()
-    if selected_box == 'Invisible Watermark':
-        invisible_watermarking()
 
 def welcome():
     
@@ -126,49 +119,6 @@ def watermark():
             final = file_bytes.copy()
             final = cv2.addWeighted(ovr,0.5,final,1.0,0,final)
             st.image(final,use_column_width=True,clamp=True)  
-
-
-def face_detection(): 
-    st.header("Face Detection")
-    uploaded_file = st.file_uploader("Upload the image", type=["png", "jpg", "jpeg"])
-    if uploaded_file is not None:
-        original = Image.open(uploaded_file)
-        if st.button('See Original Image'):
-            st.image(original, use_column_width=True)
-        file_bytes = np.array(original)
-        ext = os.path.splitext(uploaded_file.name)[-1]
-        if (ext == ".png"):
-            cv2.imwrite("3.jpg",file_bytes)
-            file_bytes = cv2.imread("3.jpg")
-        detector = MTCNN()
-        faces=detector.detect_faces(file_bytes)
-        for result in faces:
-            # get coordinates
-            x, y, width, height = result['box']
-            # create the shape
-            rect = cv2.rectangle(file_bytes,(x, y), (x+width, y+height), color=(255, 0, 0), thickness=2)
-        st.text("The number of faces detected is: "+ str(len(faces)))
-        st.image(file_bytes, use_column_width=True,clamp = True)
-
-def invisible_watermarking():
-    st.header("Invisible Watermarking")
-    st.subheader("The invisible watermarking has been performed using DWT-DCT-SVD as a combination")
-    uploaded_file = st.file_uploader("Upload the image", type=["png", "jpg", "jpeg"])
-    if uploaded_file is not None:
-        original = Image.open(uploaded_file)
-        if st.button('See Original Image'):
-            st.image(original, use_column_width=True)
-        file_bytes = np.array(original)
-        wm = 'iniw'
-        encoder = WatermarkEncoder()
-        encoder.set_watermark('bytes', wm.encode('utf-8'))
-        bgr_encoded = encoder.encode(file_bytes, 'dwtDctSvd')
-        st.text("The watermarked image")
-        st.image(bgr_encoded, use_column_width=True,clamp = True)
-        
-        decoder = WatermarkDecoder('bytes', 32)
-        watermark = decoder.decode(bgr_encoded, 'dwtDctSvd')
-        st.text("The decoded watermark is "+watermark.decode('utf-8'))
 
 def contrast():
     st.header("Changing contrast")
