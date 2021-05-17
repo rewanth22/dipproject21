@@ -2,3 +2,5 @@ streamlit==0.57.3
 numpy
 Pillow==2.3.0
 opencv-python-headless
+mtcnn
+iwatermark
