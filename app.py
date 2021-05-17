@@ -84,9 +84,9 @@ def edge_detection():
          
 def watermark():
     st.header("Watermarking")
-    uploaded_file = st.file_uploader("Upload the image", type=["png", "jpg", "jpeg"])
+    uploaded_file = st.file_uploader("Upload the image", type="jpg")
     if uploaded_file is not None:
-        uploaded_file2 = st.file_uploader("Upload the watermark image", type=["png", "jpg", "jpeg"])
+        uploaded_file2 = st.file_uploader("Upload the watermark image", type="jpg")
         if uploaded_file2 is not None:
             original = Image.open(uploaded_file)
             watermark_img = Image.open(uploaded_file2)
@@ -94,14 +94,6 @@ def watermark():
                 st.image(original, use_column_width=True)
             file_bytes = np.array(original)
             watermark_bytes=np.array(watermark_img)
-            ext = os.path.splitext(uploaded_file.name)[-1]
-            if (ext == ".png"):
-                cv2.imwrite("1.jpg",file_bytes)
-                file_bytes = cv2.imread("1.jpg")
-            ext = os.path.splitext(uploaded_file2.name)[-1]
-            if (ext == ".png"):
-                cv2.imwrite("2.jpg",watermark_bytes)
-                watermark_bytes = cv2.imread("2.jpg")
             oH,oW = file_bytes.shape[:2]
             file_bytes = np.dstack([file_bytes, np.ones((oH,oW), dtype="uint8") * 255])
 
