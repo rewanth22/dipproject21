@@ -1,5 +1,5 @@
 streamlit==0.57.3
 numpy
 Pillow==2.3.0
-opencv-python-headless==4.5.2.52
+opencv-python==2.4.9
 mtcnn
